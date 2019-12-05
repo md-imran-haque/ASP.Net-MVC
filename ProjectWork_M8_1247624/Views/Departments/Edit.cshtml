@@ -1,0 +1,64 @@
+﻿@model ProjectWork_M8_1247624.Models.Department
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="col-md-12">
+    <h2>Edit</h2>
+    <div class="alert alert-info fade in" id="msgbox" style="display:none">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <p id="msg"><strong>Error!</strong> A problem has been occurred while submitting your data.</p>
+    </div>
+
+    @using (Ajax.BeginForm("Edit", "Departments", new AjaxOptions { HttpMethod = "POST", OnSuccess = "fnSuccess", OnFailure = "fnFail" }, new { id = "frm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.DepartmentId)
+        <div class="form-horizontal">
+            <h4>Department</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.DepartmentId)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DepartmentName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function fnSuccess(result) {
+
+            if (result.success) {
+                $("#msg").html("<strong>Success!</strong> " + result.msg);
+                $("#msgbox").show();
+                $("#DepartmentName").val("");
+            }
+        }
+        function fnFail(result) {
+            $("#msg").html("<span class='text-danger'><strong>Error!</strong> " + result.msg + "</span>");
+            $("#msgbox").show();
+
+        }
+    </script>
+}
+

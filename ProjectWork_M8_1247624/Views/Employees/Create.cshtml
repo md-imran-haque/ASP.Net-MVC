@@ -1,0 +1,86 @@
+﻿@model ProjectWork_M8_1247624.Models.Employee
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="col-md-12">
+    <h2>Create</h2>
+    <div class="alert alert-info fade in" id="msgbox" style="display:none">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <p id="msg"><strong>Error!</strong> A problem has been occurred while submitting your data.</p>
+    </div>
+
+
+    @using (Ajax.BeginForm("Create", "Employees", new AjaxOptions { HttpMethod = "POST", OnSuccess = "fnSuccess", OnFailure = "fnFail" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Employee</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmployeeName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.JoinDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.JoinDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.JoinDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Grade, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.Grade, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Grade, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DepartmentId, "DepartmentId", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("DepartmentId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function fnSuccess(result) {
+
+            if (result.success) {
+                $("#msg").html("<strong>Success!</strong> " + result.msg);
+                $("#msgbox").show();
+                $("#DepartmentName").val("");
+            }
+        }
+        function fnFail(result) {
+            $("#msg").html("<span class='text-danger'><strong>Error!</strong> " + result.msg+"</span>");
+            $("#msgbox").show();
+
+        }
+    </script>
+}
